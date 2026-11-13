@@ -1,0 +1,3842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Baseline — Tennis Club &amp; Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500&display=swap" rel="stylesheet" />
+
+  <script type="importmap">
+  {
+    "imports": {
+      "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.18/+esm"
+    }
+  }
+  </script>
+
+  <style>
+    /* ==========================================================================
+       1. TOKENS & ADAPTIVE REM SCALE
+       ========================================================================== */
+    :root {
+      --background: #ffffff;
+      --foreground: #0a0a0a;
+      --brand: #2563c9;
+      --brand-deep: #0f2f63;
+      --brand-light: #5790e6;
+      --accent-teal: #0b6e97;
+      --surface: #f4f4f4;
+      --surface-card: #ffffff;
+      --ink: #0a0a0a;
+      --ink-soft: #717784;
+      --ghost: #d7dae1;
+      --hairline: #e6e8ec;
+      --on-brand: #ffffff;
+
+      --radius-card: 1.5rem;
+      --radius-card-lg: 2rem;
+      --radius-pill: 62.5rem;
+      --radius-xl: 0.75rem;
+
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    @media (max-width: 1920px) { html { font-size: 0.833333vw; } }
+    @media (max-width: 1440px) { html { font-size: 1.111111vw; } }
+    @media (max-width: 1024px) { html { font-size: 1.5625vw; } }
+    @media (max-width: 640px)  { html { font-size: 4.444444vw; } }
+
+    html.scroll-locked {
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+    }
+
+    /* ==========================================================================
+       2. RESET & BASE
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--foreground);
+      font-family: "Onest", system-ui, -apple-system, sans-serif;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    img, svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, textarea {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--brand-light);
+      outline-offset: 2px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ==========================================================================
+       3. PAGE FRAME & SHARED PRIMITIVES
+       ========================================================================== */
+    main {
+      width: 100%;
+      overflow-x: clip;
+      padding: 0.5rem;
+    }
+
+    @media (min-width: 640px) {
+      main {
+        padding: 0.75rem;
+      }
+    }
+
+    /* Eyebrow */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--ink-soft);
+    }
+
+    .eyebrow__dot {
+      width: 0.375rem;
+      height: 0.375rem;
+      border-radius: var(--radius-pill);
+      background: var(--brand);
+      flex-shrink: 0;
+    }
+
+    .eyebrow--light {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .eyebrow--light .eyebrow__dot {
+      background: var(--brand-light);
+    }
+
+    /* Pill Button */
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-radius: var(--radius-pill);
+      padding: 0.875rem 1.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .pill-btn svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      will-change: transform;
+    }
+
+    .pill-btn--light {
+      background: var(--on-brand);
+      color: var(--brand-deep);
+    }
+
+    @media (min-width: 769px) {
+      .pill-btn--light:hover {
+        background: var(--brand-light);
+        color: var(--on-brand);
+      }
+    }
+
+    .pill-btn--solid {
+      background: var(--ink);
+      color: var(--on-brand);
+    }
+
+    @media (min-width: 769px) {
+      .pill-btn--solid:hover {
+        background: var(--brand-deep);
+      }
+    }
+
+    .pill-btn--outline {
+      border: 1px solid currentColor;
+      color: var(--ink);
+    }
+
+    @media (min-width: 769px) {
+      .pill-btn--outline:hover {
+        background: var(--ink);
+        color: var(--on-brand);
+      }
+    }
+
+    /* Arrow Circle Button */
+    .arrow-btn {
+      width: 3rem;
+      height: 3rem;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    }
+
+    @media (min-width: 640px) {
+      .arrow-btn {
+        width: 3.5rem;
+        height: 3.5rem;
+      }
+    }
+
+    .arrow-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      will-change: transform;
+    }
+
+    .arrow-btn--prev svg {
+      transform: scaleX(-1);
+    }
+
+    .arrow-btn--outline {
+      border-color: var(--hairline);
+      background: transparent;
+      color: var(--ink);
+    }
+
+    @media (min-width: 769px) {
+      .arrow-btn--outline:hover {
+        border-color: var(--ink);
+      }
+    }
+
+    .arrow-btn--solid {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--on-brand);
+    }
+
+    @media (min-width: 769px) {
+      .arrow-btn--solid:hover {
+        background: var(--brand-deep);
+        border-color: var(--brand-deep);
+      }
+    }
+
+    /* Carousel Dots */
+    .carousel-dots {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .carousel-dot {
+      padding: 0.375rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carousel-dot__pill {
+      display: block;
+      height: 0.375rem;
+      width: 0.375rem;
+      border-radius: var(--radius-pill);
+      transition: width 0.35s var(--ease-out-expo), background-color 0.3s ease;
+    }
+
+    .carousel-dot[aria-current="true"] .carousel-dot__pill {
+      width: 1.25rem;
+    }
+
+    .carousel-dots--light .carousel-dot__pill {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .carousel-dots--light .carousel-dot[aria-current="true"] .carousel-dot__pill {
+      background: var(--on-brand);
+    }
+
+    .carousel-dots--dark .carousel-dot__pill {
+      background: var(--ghost);
+    }
+
+    .carousel-dots--dark .carousel-dot[aria-current="true"] .carousel-dot__pill {
+      background: var(--ink);
+    }
+
+    /* Clip-mask Reveals */
+    .clip-line {
+      display: block;
+      overflow: hidden;
+      padding-bottom: 0.14em;
+      margin-bottom: -0.14em;
+    }
+
+    .clip-line__inner {
+      display: block;
+      transform: translateY(115%);
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    .clip-line.is-revealed .clip-line__inner {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+
+    .clip-word {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      padding-bottom: 0.14em;
+      margin-bottom: -0.14em;
+    }
+
+    .clip-word__inner {
+      display: inline-block;
+      transform: translateY(115%);
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    .clip-word.is-revealed .clip-word__inner {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+
+    .fade-word {
+      display: inline-block;
+      transform: translateY(18px);
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    .fade-word.is-revealed {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       4. LOADER OVERLAY
+       ========================================================================== */
+    .loader {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--brand-deep);
+      color: var(--on-brand);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      transform: translateY(0%);
+      will-change: transform;
+    }
+
+    .loader__brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.625rem;
+      font-size: 1.5rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      opacity: 0;
+      transform: translateY(16px);
+      will-change: transform, opacity;
+    }
+
+    .loader__brand svg {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+
+    .loader__track {
+      width: 10rem;
+      height: 1px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+
+    .loader__fill {
+      width: 100%;
+      height: 100%;
+      background: var(--on-brand);
+      transform-origin: left center;
+      transform: scaleX(0);
+      will-change: transform;
+    }
+
+    /* ==========================================================================
+       5. HERO & HEADER
+       ========================================================================== */
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: var(--brand-deep);
+      color: var(--on-brand);
+      border-radius: var(--radius-card-lg);
+      height: calc(100svh - 1rem);
+      min-height: 36rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 640px) {
+      .hero {
+        height: calc(100svh - 1.5rem);
+      }
+    }
+
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      z-index: -10;
+      overflow: hidden;
+    }
+
+    .hero__parallax {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -16%;
+      height: 132%;
+      width: 100%;
+      will-change: transform;
+    }
+
+    .hero__parallax img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero__scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(15, 47, 99, 0.65),
+        rgba(15, 47, 99, 0.35),
+        rgba(15, 47, 99, 0.75)
+      );
+    }
+
+    /* Site Header */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 1.5rem 0;
+      font-size: 0.75rem;
+      color: var(--on-brand);
+    }
+
+    @media (min-width: 640px) {
+      .site-header {
+        padding: 2rem 2.5rem 0;
+      }
+    }
+
+    .site-header__nav {
+      display: none;
+      flex: 1;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    @media (min-width: 1024px) {
+      .site-header__nav {
+        display: flex;
+      }
+    }
+
+    .site-header__nav a {
+      color: rgba(255, 255, 255, 0.9);
+      transition: color 0.2s ease;
+    }
+
+    @media (min-width: 769px) {
+      .site-header__nav a:hover {
+        color: var(--on-brand);
+      }
+    }
+
+    .site-header__brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    @media (min-width: 1024px) {
+      .site-header__brand {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+
+    .site-header__brand svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .site-header__actions {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .site-header__actions {
+        gap: 1.25rem;
+      }
+    }
+
+    .site-header__book {
+      display: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    @media (min-width: 640px) {
+      .site-header__book {
+        display: inline-block;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .site-header__book:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+    }
+
+    .burger-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: background-color 0.25s ease;
+    }
+
+    @media (min-width: 769px) {
+      .burger-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+    }
+
+    .burger-btn__bars {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .burger-btn__bars span {
+      display: block;
+      width: 1rem;
+      height: 1px;
+      background: var(--on-brand);
+    }
+
+    /* Hero Title */
+    .hero__title-wrap {
+      padding: 1rem 1.5rem 0;
+    }
+
+    @media (min-width: 640px) {
+      .hero__title-wrap {
+        padding: 1rem 2.5rem 0;
+      }
+    }
+
+    .hero__title {
+      font-size: 12.5vw;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 0.85;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .hero__title .clip-word + .clip-word {
+      margin-left: 0.24em;
+    }
+
+    /* Hero Bottom Cluster */
+    .hero__bottom {
+      margin-top: auto;
+      padding: 0 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .hero__bottom {
+        padding: 0 2.5rem 2.5rem;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+    }
+
+    .hero__tagline {
+      font-size: 2.4rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .hero__cards {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    /* Collection Slider */
+    .collection-slider {
+      display: none;
+      width: 16rem;
+      flex-direction: column;
+      gap: 0.75rem;
+      opacity: 0;
+      transform: translateY(28px);
+      will-change: transform, opacity;
+    }
+
+    @media (min-width: 768px) {
+      .collection-slider {
+        display: flex;
+      }
+    }
+
+    .collection-slider__stage {
+      position: relative;
+      min-height: 5.125rem;
+    }
+
+    .glass-card {
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.75rem;
+      box-shadow: 0 18px 40px -12px rgba(15, 47, 99, 0.2);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .collection-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      will-change: transform, opacity;
+    }
+
+    .collection-card--outgoing {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .collection-card__img {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: var(--radius-xl);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .collection-card__meta {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+
+    .collection-card__brand {
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .collection-card__title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .collection-card__cta {
+      margin-top: 0.25rem;
+      display: inline-block;
+      font-size: 0.65rem;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      opacity: 0.95;
+    }
+
+    /* Membership Card */
+    .membership-card {
+      width: 100%;
+      max-width: 20rem;
+      display: flex;
+      align-items: stretch;
+      gap: 0.75rem;
+      opacity: 0;
+      transform: translateY(28px);
+      will-change: transform, opacity;
+    }
+
+    @media (min-width: 640px) {
+      .membership-card {
+        width: 15rem;
+        max-width: 15rem;
+      }
+    }
+
+    .membership-card__left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .membership-card__stat {
+      font-size: 1.875rem;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .membership-card__avatars {
+      display: flex;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .membership-card__dot {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(15, 47, 99, 0.4);
+    }
+
+    .membership-card__dot + .membership-card__dot {
+      margin-left: -0.5rem;
+    }
+
+    .membership-card__caption {
+      margin-top: 0.5rem;
+      font-size: 0.65rem;
+      opacity: 0.8;
+    }
+
+    .membership-card__img {
+      width: 4rem;
+      aspect-ratio: 3 / 4;
+      border-radius: var(--radius-xl);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       6. TRUST SECTION (COACH CAROUSEL)
+       ========================================================================== */
+    .trust {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: var(--background);
+      padding: 4rem 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .trust {
+        padding: 5rem 2.5rem;
+      }
+    }
+
+    .trust__top {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .trust__top {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .trust__percent {
+      width: 7rem;
+      height: 7rem;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.75rem;
+      flex-shrink: 0;
+      opacity: 0;
+      transform: scale(0.9);
+      will-change: transform, opacity;
+    }
+
+    @media (min-width: 640px) {
+      .trust__percent {
+        width: 8rem;
+        height: 8rem;
+      }
+    }
+
+    .trust__percent-val {
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: 1.1;
+    }
+
+    .trust__percent-cap {
+      margin-top: 0.25rem;
+      font-size: 0.6rem;
+      color: var(--ink-soft);
+      max-width: 7em;
+      line-height: 1.25;
+    }
+
+    .trust__badge-card {
+      max-width: 28rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      padding: 1.25rem;
+      opacity: 0;
+      transform: translateY(24px);
+      will-change: transform, opacity;
+    }
+
+    @media (min-width: 640px) {
+      .trust__badge-card {
+        gap: 1.25rem;
+        padding: 1.5rem;
+      }
+    }
+
+    .trust__chip {
+      border-radius: var(--radius-xl);
+      background: var(--background);
+      padding: 0.5rem 1rem;
+      font-size: 1.25rem;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .trust__badge-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .trust__badge-body {
+      margin-top: 0.375rem;
+      font-size: 0.75rem;
+      color: var(--ink-soft);
+      line-height: 1.625;
+    }
+
+    /* Ghost Heading */
+    .trust__ghost {
+      position: relative;
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+      max-width: 88rem;
+      margin: 3rem auto 0;
+      font-size: 8.2vw;
+      font-weight: 500;
+      text-transform: uppercase;
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      color: var(--ghost);
+    }
+
+    .trust__ghost-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .trust__ghost-parallax {
+      display: inline-block;
+      will-change: transform;
+    }
+
+    .trust__ghost-word {
+      display: inline-block;
+      overflow: hidden;
+      padding: 0.12em 0;
+      margin: -0.12em 0;
+    }
+
+    .trust__ghost-word span {
+      display: inline-block;
+      transform: translateY(115%);
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    .trust__ghost-word.is-revealed span {
+      transform: translateY(0%);
+      opacity: 1;
+    }
+
+    .trust__ghost-word--ink {
+      color: var(--ink);
+    }
+
+    /* Center Coach Card */
+    .trust__coach-wrap {
+      position: relative;
+      z-index: 10;
+      margin: 2rem auto 0;
+      width: 13rem;
+      opacity: 0;
+      transform: translateY(60px) scale(0.92);
+      will-change: transform, opacity;
+    }
+
+    @media (min-width: 640px) {
+      .trust__coach-wrap {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin: 0;
+        width: 16rem;
+        transform: translate(-50%, -50%) translateY(60px) scale(0.92);
+      }
+    }
+
+    .trust__coach-card {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      border-radius: var(--radius-card);
+      background: var(--brand);
+      overflow: hidden;
+      transform: rotate(6deg);
+      box-shadow: 0 24px 48px -16px rgba(15, 47, 99, 0.25);
+    }
+
+    .trust__coach-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: opacity;
+    }
+
+    .trust__coach-caption {
+      position: absolute;
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      border-radius: var(--radius-xl);
+      background: rgba(15, 47, 99, 0.4);
+      color: var(--on-brand);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 0.5rem 0.75rem;
+    }
+
+    .trust__coach-name {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .trust__coach-role {
+      font-size: 0.65rem;
+      opacity: 0.8;
+    }
+
+    /* Carousel Controls */
+    .trust__controls {
+      position: relative;
+      z-index: 20;
+      margin-top: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    @media (min-width: 640px) {
+      .trust__controls {
+        margin-top: 6rem;
+      }
+    }
+
+    /* ==========================================================================
+       7. PROGRAMS SECTION
+       ========================================================================== */
+    .programs {
+      background: var(--surface);
+      padding: 6rem 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .programs {
+        padding: 6rem 2.5rem;
+      }
+    }
+
+    .section-heading {
+      margin-top: 1rem;
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    .programs__list {
+      list-style: none;
+      margin-top: 3.5rem;
+    }
+
+    .programs__item {
+      border-top: 1px solid var(--hairline);
+    }
+
+    .programs__item:last-child {
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .programs__link {
+      display: block;
+      transition: background-color 0.2s ease;
+    }
+
+    .programs__link:focus-visible {
+      background: var(--background);
+    }
+
+    .programs__row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.75rem 0;
+      opacity: 0;
+      transform: translateY(26px);
+      will-change: transform, opacity;
+    }
+
+    .programs__index {
+      width: 2.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+      flex-shrink: 0;
+    }
+
+    .programs__info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    @media (min-width: 768px) {
+      .programs__info {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+      }
+    }
+
+    .programs__name {
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    @media (min-width: 640px) {
+      .programs__name {
+        font-size: 1.875rem;
+      }
+    }
+
+    .programs__desc {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+    }
+
+    .programs__arrow {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--hairline);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      opacity: 0.55;
+      will-change: transform, opacity;
+    }
+
+    .programs__arrow svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+
+    /* ==========================================================================
+       8. FACILITIES SECTION
+       ========================================================================== */
+    .facilities {
+      position: relative;
+      z-index: 10;
+      background: var(--background);
+      border-radius: var(--radius-card-lg);
+      margin-top: -2.5rem;
+      padding: 4rem 1.5rem 5rem;
+    }
+
+    @media (min-width: 640px) {
+      .facilities {
+        padding: 4rem 2.5rem 5rem;
+      }
+    }
+
+    .facilities__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: end;
+      gap: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .facilities__grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .facilities__intro {
+      max-width: 24rem;
+    }
+
+    .facilities__thumb {
+      width: 4rem;
+      height: 4rem;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      opacity: 0;
+      transform: scale(0.85);
+      will-change: transform, opacity;
+    }
+
+    .facilities__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .facilities__title {
+      margin-top: 1.5rem;
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    .facilities__body {
+      margin-top: 1.5rem;
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      max-width: 20rem;
+      line-height: 1.6;
+    }
+
+    .facilities__cards {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.25rem;
+    }
+
+    .court-card {
+      flex: 1;
+      opacity: 0;
+      transform: translateY(48px);
+      will-change: transform, opacity;
+    }
+
+    .court-card--offset {
+      margin-bottom: 2rem;
+    }
+
+    .court-card__frame {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .court-card__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      will-change: transform;
+    }
+
+    .court-card__caption {
+      position: absolute;
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: var(--on-brand);
+      padding: 0.75rem 1rem;
+    }
+
+    .court-card__caption--clay {
+      background: rgba(15, 47, 99, 0.4);
+    }
+
+    .court-card__caption--blue {
+      background: rgba(11, 110, 151, 0.55);
+    }
+
+    .court-card__name {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .court-card__desc {
+      margin-top: 0.25rem;
+      font-size: 0.65rem;
+      opacity: 0.85;
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       9. STATS SECTION
+       ========================================================================== */
+    .stats {
+      background: var(--brand-deep);
+      color: var(--on-brand);
+      border-radius: var(--radius-card-lg);
+      margin-top: 0.75rem;
+      padding: 5rem 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .stats {
+        padding: 5rem 2.5rem;
+      }
+    }
+
+    .stats__grid {
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3rem 2rem;
+    }
+
+    @media (min-width: 1024px) {
+      .stats__grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .stat-cell {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 1.25rem;
+      opacity: 0;
+      transform: translateY(30px);
+      will-change: transform, opacity;
+    }
+
+    .stat-cell__value {
+      font-size: 3.75rem;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    @media (min-width: 640px) {
+      .stat-cell__value {
+        font-size: 4.5rem;
+      }
+    }
+
+    .stat-cell__label {
+      margin-top: 0.75rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    /* ==========================================================================
+       10. TESTIMONIALS SECTION
+       ========================================================================== */
+    .testimonials {
+      background: var(--background);
+      padding: 5rem 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .testimonials {
+        padding: 6rem 2.5rem;
+      }
+    }
+
+    .testimonials__grid {
+      list-style: none;
+      margin-top: 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .testimonials__grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .testimonial-item {
+      opacity: 0;
+      transform: translateY(40px);
+      will-change: transform, opacity;
+    }
+
+    .testimonial-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      padding: 1.75rem;
+      will-change: transform;
+    }
+
+    .testimonial-card__quote-mark {
+      font-size: 2.25rem;
+      font-weight: 500;
+      color: var(--brand);
+      line-height: 1;
+    }
+
+    .testimonial-card__quote {
+      margin-top: 1rem;
+      font-size: 1.125rem;
+      line-height: 1.625;
+      color: var(--ink);
+    }
+
+    .testimonial-card__author {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--hairline);
+      padding-top: 1rem;
+    }
+
+    .testimonial-card__name {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .testimonial-card__role {
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+    }
+
+    /* ==========================================================================
+       11. FOOTER
+       ========================================================================== */
+    .site-footer {
+      background: var(--brand-deep);
+      color: var(--on-brand);
+      border-radius: var(--radius-card-lg);
+      margin-top: 0.75rem;
+      padding: 3.5rem 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .site-footer {
+        padding: 4rem 2.5rem;
+      }
+    }
+
+    .footer__cta-band {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 3.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .footer__cta-band {
+        flex-direction: row;
+        align-items: flex-end;
+      }
+    }
+
+    .footer__cta-title {
+      margin-top: 1rem;
+      font-size: 3.75rem;
+      font-weight: 500;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+    }
+
+    .footer__cta-action {
+      opacity: 0;
+      transform: translateY(20px);
+      will-change: transform, opacity;
+    }
+
+    .footer__cols {
+      padding: 3.5rem 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .footer__cols {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      }
+    }
+
+    .footer__brand-col {
+      max-width: 20rem;
+    }
+
+    .footer__brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.125rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .footer__brand-mark svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .footer__blurb {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .footer__address {
+      font-style: normal;
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .footer__address a {
+      transition: color 0.2s ease;
+    }
+
+    @media (min-width: 769px) {
+      .footer__address a:hover {
+        color: var(--on-brand);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+    }
+
+    .footer__street {
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    .footer__nav-title {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .footer__nav-list {
+      list-style: none;
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .footer__nav-list a {
+      transition: color 0.2s ease;
+    }
+
+    @media (min-width: 769px) {
+      .footer__nav-list a:hover {
+        color: var(--on-brand);
+      }
+    }
+
+    .footer__bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    @media (min-width: 640px) {
+      .footer__bottom {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .footer__bottom-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .footer__bottom-links a {
+      transition: color 0.2s ease;
+    }
+
+    @media (min-width: 769px) {
+      .footer__bottom-links a:hover {
+        color: var(--on-brand);
+      }
+    }
+
+    /* ==========================================================================
+       12. FULLSCREEN MENU OVERLAY
+       ========================================================================== */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 70;
+      display: flex;
+      flex-direction: column;
+      color: var(--on-brand);
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .menu-overlay.is-open {
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .menu-overlay__backdrop {
+      position: absolute;
+      inset: 0;
+      background: var(--brand-deep);
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    .menu-overlay__panel {
+      position: relative;
+      z-index: 10;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem;
+      opacity: 0;
+      transform: translateY(-24px);
+      will-change: transform, opacity;
+    }
+
+    @media (min-width: 640px) {
+      .menu-overlay__panel {
+        padding: 2.75rem 3.25rem;
+      }
+    }
+
+    .menu-overlay__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .menu-overlay__close {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.15);
+      display: grid;
+      place-items: center;
+      transition: background-color 0.25s ease;
+    }
+
+    @media (min-width: 769px) {
+      .menu-overlay__close:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+    }
+
+    .menu-overlay__close svg {
+      width: 1.125rem;
+      height: 1.125rem;
+      will-change: transform;
+    }
+
+    .menu-overlay__nav {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .menu-overlay__link-wrap {
+      opacity: 0;
+      transform: translateY(28px);
+      will-change: transform, opacity;
+    }
+
+    .menu-overlay__link {
+      display: block;
+      font-size: 3rem;
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      transition: color 0.2s ease;
+    }
+
+    @media (min-width: 640px) {
+      .menu-overlay__link {
+        font-size: 4.5rem;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .menu-overlay__link:hover {
+        color: var(--brand-light);
+      }
+    }
+
+    .menu-overlay__footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      padding-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .menu-overlay__footer {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    .menu-overlay__socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .menu-overlay__socials a {
+      transition: color 0.2s ease;
+    }
+
+    @media (min-width: 769px) {
+      .menu-overlay__socials a:hover {
+        color: var(--on-brand);
+      }
+    }
+
+    /* ==========================================================================
+       13. CONTACT MODAL
+       ========================================================================== */
+    .contact-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0.75rem;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    @media (min-width: 640px) {
+      .contact-modal {
+        align-items: center;
+        padding: 1.5rem;
+      }
+    }
+
+    .contact-modal.is-open {
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    .contact-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 47, 99, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    .contact-modal__panel {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-height: 92svh;
+      overflow-y: auto;
+      border-radius: var(--radius-card-lg);
+      background: var(--surface-card);
+      padding: 1.5rem;
+      color: var(--ink);
+      box-shadow: 0 32px 72px -16px rgba(15, 47, 99, 0.35);
+      opacity: 0;
+      transform: translateY(28px) scale(0.96);
+      will-change: transform, opacity;
+    }
+
+    @media (min-width: 640px) {
+      .contact-modal__panel {
+        max-width: 32rem;
+        padding: 2rem;
+      }
+    }
+
+    .contact-modal__header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .contact-modal__title {
+      margin-top: 0.75rem;
+      font-size: 2.25rem;
+      font-weight: 500;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+    }
+
+    @media (min-width: 640px) {
+      .contact-modal__title {
+        font-size: 3rem;
+      }
+    }
+
+    .contact-modal__close {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: var(--radius-pill);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      transition: background-color 0.2s ease;
+    }
+
+    @media (min-width: 769px) {
+      .contact-modal__close:hover {
+        background: var(--hairline);
+      }
+    }
+
+    .contact-modal__close svg {
+      width: 1.125rem;
+      height: 1.125rem;
+      will-change: transform;
+    }
+
+    .contact-form {
+      margin-top: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-form__field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .contact-form__label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-soft);
+    }
+
+    .contact-form__input {
+      width: 100%;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--hairline);
+      background: var(--background);
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .contact-form__input:focus {
+      outline: none;
+      border-color: var(--brand-light);
+      box-shadow: 0 0 0 3px rgba(87, 144, 230, 0.2);
+    }
+
+    .contact-form__submit {
+      margin-top: 0.5rem;
+      width: 100%;
+      border-radius: var(--radius-pill);
+      background: var(--ink);
+      color: var(--on-brand);
+      padding: 0.875rem 1.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: background-color 0.25s ease, opacity 0.2s ease;
+    }
+
+    @media (min-width: 769px) {
+      .contact-form__submit:hover:not(:disabled) {
+        background: var(--brand-deep);
+      }
+    }
+
+    .contact-form__submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Success Panel */
+    .contact-success {
+      margin-top: 2rem;
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      padding: 1.5rem;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .contact-success.is-visible {
+      display: flex;
+    }
+
+    .contact-success__icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: var(--radius-pill);
+      background: var(--brand);
+      color: var(--on-brand);
+      display: grid;
+      place-items: center;
+    }
+
+    .contact-success__icon svg {
+      width: 1.375rem;
+      height: 1.375rem;
+    }
+
+    .contact-success__title {
+      margin-top: 1rem;
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .contact-success__body {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--ink-soft);
+      max-width: 22rem;
+    }
+
+    .contact-success__done {
+      margin-top: 1.5rem;
+      border-radius: var(--radius-pill);
+      background: var(--ink);
+      color: var(--on-brand);
+      padding: 0.875rem 2rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: background-color 0.25s ease;
+    }
+
+    @media (min-width: 769px) {
+      .contact-success__done:hover {
+        background: var(--brand-deep);
+      }
+    }
+
+    /* Reduced Motion Safety */
+    @media (prefers-reduced-motion: reduce) {
+      .clip-line__inner,
+      .clip-word__inner,
+      .fade-word,
+      .trust__ghost-word span {
+        transform: none !important;
+        opacity: 1 !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       NAVY INTRO LOADER CURTAIN
+       ======================================================================== -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__brand" id="loader-brand">
+      <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M4.8 5.6A9 9 0 0 0 4.8 18.4" />
+        <path d="M19.2 5.6a9 9 0 0 1 0 12.8" />
+      </svg>
+      <span>Baseline</span>
+    </div>
+    <div class="loader__track">
+      <div class="loader__fill" id="loader-fill"></div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MAIN PAGE CONTENT
+       ======================================================================== -->
+  <main id="top">
+
+    <!-- 1 & 2) HERO SECTION + HEADER -->
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <div class="hero__bg">
+        <div class="hero__parallax" id="hero-parallax">
+          <img
+            src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/hero/hero-court.webp"
+            alt="Player lunging for a shot on a hard court"
+            fetchpriority="high"
+            loading="eager"
+          />
+        </div>
+        <div class="hero__scrim"></div>
+      </div>
+
+      <!-- Site Header -->
+      <header class="site-header">
+        <nav class="site-header__nav" aria-label="Primary">
+          <a href="#programs" data-scroll-to="#programs">Programs &amp; Coaches</a>
+          <a href="#facilities" data-scroll-to="#facilities">Club &amp; Events</a>
+        </nav>
+
+        <a href="#top" class="site-header__brand" data-scroll-to="#top">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M4.8 5.6A9 9 0 0 0 4.8 18.4" />
+            <path d="M19.2 5.6a9 9 0 0 1 0 12.8" />
+          </svg>
+          <span>Baseline</span>
+        </a>
+
+        <div class="site-header__actions">
+          <button type="button" class="site-header__book" data-open-contact>Book a Visit</button>
+          <button type="button" class="burger-btn" id="open-menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="menu-overlay">
+            <span class="burger-btn__bars" aria-hidden="true">
+              <span></span>
+              <span></span>
+            </span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Giant Hero Title -->
+      <div class="hero__title-wrap">
+        <h1 class="hero__title" id="hero-title" data-word-reveal="hero">Own The Court</h1>
+      </div>
+
+      <!-- Bottom Tagline & Cards Cluster -->
+      <div class="hero__bottom">
+        <p class="hero__tagline" data-stacked-lines="hero-tagline">
+          <span class="clip-line"><span class="clip-line__inner">Show Up,</span></span>
+          <span class="clip-line"><span class="clip-line__inner">Level Up</span></span>
+        </p>
+
+        <div class="hero__cards">
+          <!-- Collection Slider -->
+          <div class="collection-slider" id="collection-slider">
+            <div class="collection-slider__stage" id="collection-stage">
+              <article class="glass-card collection-card" id="collection-active-card">
+                <img
+                  class="collection-card__img"
+                  src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/2.webp"
+                  alt="Player driving a backhand on a hard court"
+                  loading="lazy"
+                />
+                <div class="collection-card__meta">
+                  <span class="collection-card__brand">Baseline Pro</span>
+                  <span class="collection-card__title">Featured Gear</span>
+                  <a href="#shop" class="collection-card__cta" data-open-contact>Shop the kit →</a>
+                </div>
+              </article>
+            </div>
+
+            <div class="carousel-dots carousel-dots--light" id="collection-dots" role="tablist" aria-label="Featured collections">
+              <button type="button" class="carousel-dot" aria-label="Collection 1" aria-current="true" data-slide="0">
+                <span class="carousel-dot__pill"></span>
+              </button>
+              <button type="button" class="carousel-dot" aria-label="Collection 2" aria-current="false" data-slide="1">
+                <span class="carousel-dot__pill"></span>
+              </button>
+              <button type="button" class="carousel-dot" aria-label="Collection 3" aria-current="false" data-slide="2">
+                <span class="carousel-dot__pill"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Membership Card -->
+          <article class="glass-card membership-card" id="membership-card">
+            <div class="membership-card__left">
+              <div>
+                <div class="membership-card__stat">9K+</div>
+                <div class="membership-card__avatars" aria-hidden="true">
+                  <span class="membership-card__dot" style="background: #5790e6;"></span>
+                  <span class="membership-card__dot" style="background: #c2e029;"></span>
+                  <span class="membership-card__dot" style="background: #0b6e97;"></span>
+                  <span class="membership-card__dot" style="background: #ffffff;"></span>
+                </div>
+              </div>
+              <div class="membership-card__caption">Members on court</div>
+            </div>
+            <img
+              class="membership-card__img"
+              src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/1.webp"
+              alt="Player waiting to return on a clay court"
+              loading="lazy"
+            />
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) TRUST SECTION ("Trusted by serious players") -->
+    <section class="trust" id="trust" aria-labelledby="trust-title">
+      <div class="trust__top">
+        <div class="trust__percent" id="trust-percent">
+          <div class="trust__percent-val">100%</div>
+          <div class="trust__percent-cap">Coaching built around your game</div>
+        </div>
+
+        <article class="trust__badge-card" id="trust-badge-card">
+          <span class="trust__chip">#01</span>
+          <div>
+            <h3 class="trust__badge-title">Trusted by serious players</h3>
+            <p class="trust__badge-body">
+              From first-timers to nationally ranked juniors, players train here because the progress shows up on the scoreboard.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <!-- Giant 2x2 Ghost Heading -->
+      <h2 class="trust__ghost" id="trust-title">
+        <span class="trust__ghost-row">
+          <span class="trust__ghost-parallax" data-ghost-px="0">
+            <span class="trust__ghost-word" data-ghost-word="0"><span>Expert</span></span>
+          </span>
+          <span class="trust__ghost-parallax" data-ghost-px="1">
+            <span class="trust__ghost-word" data-ghost-word="1"><span>Result-</span></span>
+          </span>
+        </span>
+        <span class="trust__ghost-row">
+          <span class="trust__ghost-parallax" data-ghost-px="2">
+            <span class="trust__ghost-word trust__ghost-word--ink" data-ghost-word="2"><span>Driven</span></span>
+          </span>
+          <span class="trust__ghost-parallax" data-ghost-px="3">
+            <span class="trust__ghost-word" data-ghost-word="3"><span>Coaching</span></span>
+          </span>
+        </span>
+      </h2>
+
+      <!-- Center Tilted Coach Card -->
+      <div class="trust__coach-wrap" id="trust-coach-wrap">
+        <figure class="trust__coach-card" id="trust-coach-card">
+          <img
+            class="trust__coach-photo"
+            id="trust-coach-photo"
+            src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/5.webp"
+            alt="Head coach set in a ready stance on clay"
+            loading="lazy"
+          />
+          <figcaption class="trust__coach-caption">
+            <div class="trust__coach-name" id="trust-coach-name">Marco Vidal</div>
+            <div class="trust__coach-role" id="trust-coach-role">Head Coach</div>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Carousel Controls -->
+      <div class="trust__controls">
+        <button type="button" class="arrow-btn arrow-btn--outline arrow-btn--prev" id="trust-prev" aria-label="Previous coach">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </button>
+
+        <div class="carousel-dots carousel-dots--dark" id="trust-dots" role="tablist" aria-label="Coaches">
+          <button type="button" class="carousel-dot" aria-label="Coach 1" aria-current="true" data-coach="0">
+            <span class="carousel-dot__pill"></span>
+          </button>
+          <button type="button" class="carousel-dot" aria-label="Coach 2" aria-current="false" data-coach="1">
+            <span class="carousel-dot__pill"></span>
+          </button>
+          <button type="button" class="carousel-dot" aria-label="Coach 3" aria-current="false" data-coach="2">
+            <span class="carousel-dot__pill"></span>
+          </button>
+        </div>
+
+        <button type="button" class="arrow-btn arrow-btn--solid" id="trust-next" aria-label="Next coach">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- 4) PROGRAMS SECTION -->
+    <section class="programs" id="programs" aria-labelledby="programs-title">
+      <div class="eyebrow">
+        <span class="eyebrow__dot" aria-hidden="true"></span>
+        <span>Training programs</span>
+      </div>
+
+      <h2 class="section-heading" id="programs-title" data-stacked-lines="programs">
+        <span class="clip-line"><span class="clip-line__inner">Built for</span></span>
+        <span class="clip-line"><span class="clip-line__inner">every level</span></span>
+      </h2>
+
+      <ul class="programs__list">
+        <li class="programs__item" id="junior">
+          <a href="#junior" class="programs__link" data-program-row="0">
+            <div class="programs__row">
+              <span class="programs__index">01</span>
+              <div class="programs__info">
+                <h3 class="programs__name">Junior Development</h3>
+                <p class="programs__desc">Fundamentals, footwork, and match play for ages 6–14.</p>
+              </div>
+              <span class="programs__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </div>
+          </a>
+        </li>
+
+        <li class="programs__item" id="performance">
+          <a href="#performance" class="programs__link" data-program-row="1">
+            <div class="programs__row">
+              <span class="programs__index">02</span>
+              <div class="programs__info">
+                <h3 class="programs__name">Performance Squad</h3>
+                <p class="programs__desc">High-volume training for competitive and ranked players.</p>
+              </div>
+              <span class="programs__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </div>
+          </a>
+        </li>
+
+        <li class="programs__item" id="adult">
+          <a href="#adult" class="programs__link" data-program-row="2">
+            <div class="programs__row">
+              <span class="programs__index">03</span>
+              <div class="programs__info">
+                <h3 class="programs__name">Adult Clinics</h3>
+                <p class="programs__desc">Small-group sessions to sharpen technique and fitness.</p>
+              </div>
+              <span class="programs__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </div>
+          </a>
+        </li>
+
+        <li class="programs__item" id="private">
+          <a href="#private" class="programs__link" data-program-row="3">
+            <div class="programs__row">
+              <span class="programs__index">04</span>
+              <div class="programs__info">
+                <h3 class="programs__name">Private Coaching</h3>
+                <p class="programs__desc">One-to-one sessions tailored to your goals and schedule.</p>
+              </div>
+              <span class="programs__arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 5) FACILITIES SECTION -->
+    <section class="facilities" id="facilities" aria-labelledby="facilities-title">
+      <div class="facilities__grid">
+        <div class="facilities__intro">
+          <div class="facilities__thumb" id="facilities-thumb">
+            <img
+              src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/3.webp"
+              alt="Player stretching for a forehand on clay"
+              loading="lazy"
+            />
+          </div>
+
+          <h2 class="facilities__title" id="facilities-title" data-stacked-lines="facilities">
+            <span class="clip-line"><span class="clip-line__inner">Tour Our</span></span>
+            <span class="clip-line"><span class="clip-line__inner">World-Class</span></span>
+            <span class="clip-line"><span class="clip-line__inner">Courts</span></span>
+          </h2>
+
+          <p class="facilities__body" id="facilities-body">
+            Reserve a court for focused practice, squad drills, or private sessions — and train in the same conditions you'll compete in.
+          </p>
+        </div>
+
+        <div class="facilities__cards">
+          <figure class="court-card" data-court-card="0">
+            <div class="court-card__frame">
+              <img
+                class="court-card__img"
+                src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/1.webp"
+                alt="Player on the baseline of an outdoor clay court"
+                loading="lazy"
+              />
+              <figcaption class="court-card__caption court-card__caption--clay">
+                <div class="court-card__name">Redline Clay</div>
+                <p class="court-card__desc">A fast outdoor clay court tuned for long, physical rallies.</p>
+              </figcaption>
+            </div>
+          </figure>
+
+          <figure class="court-card court-card--offset" data-court-card="1">
+            <div class="court-card__frame">
+              <img
+                class="court-card__img"
+                src="https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000/4.webp"
+                alt="Player following through on a blue hard court"
+                loading="lazy"
+              />
+              <figcaption class="court-card__caption court-card__caption--blue">
+                <div class="court-card__name">Harbor Court</div>
+                <p class="court-card__desc">A sheltered hard court built for precision and night play.</p>
+              </figcaption>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6) STATS SECTION -->
+    <section class="stats" id="stats" aria-labelledby="stats-title">
+      <div class="eyebrow eyebrow--light">
+        <span class="eyebrow__dot" aria-hidden="true"></span>
+        <span>By the numbers</span>
+      </div>
+
+      <h2 class="section-heading" id="stats-title" data-stacked-lines="stats">
+        <span class="clip-line"><span class="clip-line__inner">A club that</span></span>
+        <span class="clip-line"><span class="clip-line__inner">keeps score</span></span>
+      </h2>
+
+      <dl class="stats__grid">
+        <div class="stat-cell" data-stat-cell="0">
+          <dt class="sr-only">Certified coaches</dt>
+          <dd>
+            <div class="stat-cell__value">24</div>
+            <div class="stat-cell__label">Certified coaches</div>
+          </dd>
+        </div>
+
+        <div class="stat-cell" data-stat-cell="1">
+          <dt class="sr-only">Championship courts</dt>
+          <dd>
+            <div class="stat-cell__value">12</div>
+            <div class="stat-cell__label">Championship courts</div>
+          </dd>
+        </div>
+
+        <div class="stat-cell" data-stat-cell="2">
+          <dt class="sr-only">Members training</dt>
+          <dd>
+            <div class="stat-cell__value">9K+</div>
+            <div class="stat-cell__label">Members training</div>
+          </dd>
+        </div>
+
+        <div class="stat-cell" data-stat-cell="3">
+          <dt class="sr-only">Years on the baseline</dt>
+          <dd>
+            <div class="stat-cell__value">15</div>
+            <div class="stat-cell__label">Years on the baseline</div>
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- 7) TESTIMONIALS SECTION -->
+    <section class="testimonials" id="testimonials" aria-labelledby="testimonials-title">
+      <div class="eyebrow">
+        <span class="eyebrow__dot" aria-hidden="true"></span>
+        <span>What players say</span>
+      </div>
+
+      <h2 class="section-heading" id="testimonials-title" data-stacked-lines="testimonials">
+        <span class="clip-line"><span class="clip-line__inner">Loved by</span></span>
+        <span class="clip-line"><span class="clip-line__inner">the locker room</span></span>
+      </h2>
+
+      <ul class="testimonials__grid">
+        <li class="testimonial-item" data-testimonial="0">
+          <figure class="testimonial-card">
+            <div>
+              <div class="testimonial-card__quote-mark" aria-hidden="true">“</div>
+              <blockquote class="testimonial-card__quote">
+                I added a level to my serve in one season. The coaching is detailed and it actually sticks.
+              </blockquote>
+            </div>
+            <figcaption class="testimonial-card__author">
+              <div class="testimonial-card__name">Priya Anand</div>
+              <div class="testimonial-card__role">Performance Squad</div>
+            </figcaption>
+          </figure>
+        </li>
+
+        <li class="testimonial-item" data-testimonial="1">
+          <figure class="testimonial-card">
+            <div>
+              <div class="testimonial-card__quote-mark" aria-hidden="true">“</div>
+              <blockquote class="testimonial-card__quote">
+                Best courts in the city and a team that treats every member like a competitor.
+              </blockquote>
+            </div>
+            <figcaption class="testimonial-card__author">
+              <div class="testimonial-card__name">Lukas Brenner</div>
+              <div class="testimonial-card__role">Adult Clinics</div>
+            </figcaption>
+          </figure>
+        </li>
+
+        <li class="testimonial-item" data-testimonial="2">
+          <figure class="testimonial-card">
+            <div>
+              <div class="testimonial-card__quote-mark" aria-hidden="true">“</div>
+              <blockquote class="testimonial-card__quote">
+                My daughter went from shy beginner to club champion. Worth every minute.
+              </blockquote>
+            </div>
+            <figcaption class="testimonial-card__author">
+              <div class="testimonial-card__name">Dana Okafor</div>
+              <div class="testimonial-card__role">Parent, Junior Development</div>
+            </figcaption>
+          </figure>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 8) FOOTER -->
+    <footer class="site-footer" id="contact">
+      <div class="footer__cta-band">
+        <div>
+          <div class="eyebrow eyebrow--light">
+            <span class="eyebrow__dot" aria-hidden="true"></span>
+            <span>Get started</span>
+          </div>
+          <p class="footer__cta-title" data-stacked-lines="footer-cta">
+            <span class="clip-line"><span class="clip-line__inner">Ready to</span></span>
+            <span class="clip-line"><span class="clip-line__inner">play?</span></span>
+          </p>
+        </div>
+
+        <div class="footer__cta-action" id="footer-cta-action">
+          <button type="button" class="pill-btn pill-btn--light" data-open-contact>
+            <span>Book a Visit</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="footer__cols">
+        <div class="footer__brand-col">
+          <a href="#top" class="footer__brand-mark" data-scroll-to="#top">
+            <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M4.8 5.6A9 9 0 0 0 4.8 18.4" />
+              <path d="M19.2 5.6a9 9 0 0 1 0 12.8" />
+            </svg>
+            <span>Baseline</span>
+          </a>
+          <p class="footer__blurb">
+            A members' tennis club and academy where focused coaching meets championship courts.
+          </p>
+          <address class="footer__address">
+            <a href="mailto:play@baseline.club">play@baseline.club</a>
+            <a href="tel:+12125550148">+1 (212) 555-0148</a>
+            <span class="footer__street">120 Court Lane, New York</span>
+          </address>
+        </div>
+
+        <nav aria-label="Programs">
+          <h3 class="footer__nav-title">Programs</h3>
+          <ul class="footer__nav-list">
+            <li><a href="#junior" data-scroll-to="#programs">Junior Development</a></li>
+            <li><a href="#performance" data-scroll-to="#programs">Performance Squad</a></li>
+            <li><a href="#adult" data-scroll-to="#programs">Adult Clinics</a></li>
+            <li><a href="#private" data-scroll-to="#programs">Private Coaching</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Club">
+          <h3 class="footer__nav-title">Club</h3>
+          <ul class="footer__nav-list">
+            <li><a href="#membership" data-open-contact>Membership</a></li>
+            <li><a href="#facilities" data-scroll-to="#facilities">Facilities</a></li>
+            <li><a href="#club" data-scroll-to="#facilities">Events</a></li>
+            <li><a href="#shop" data-open-contact>Pro Shop</a></li>
+          </ul>
+        </nav>
+
+        <nav aria-label="Company">
+          <h3 class="footer__nav-title">Company</h3>
+          <ul class="footer__nav-list">
+            <li><a href="#about" data-scroll-to="#trust">About</a></li>
+            <li><a href="#programs" data-scroll-to="#programs">Coaches</a></li>
+            <li><a href="#careers" data-open-contact>Careers</a></li>
+            <li><a href="#contact" data-open-contact>Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer__bottom">
+        <div>© 2026 Baseline Tennis Club. All rights reserved.</div>
+
+        <nav class="footer__bottom-links" aria-label="Social">
+          <a href="#instagram">Instagram</a>
+          <a href="#x">X</a>
+          <a href="#youtube">YouTube</a>
+          <a href="#linkedin">LinkedIn</a>
+        </nav>
+
+        <nav class="footer__bottom-links" aria-label="Legal">
+          <a href="#privacy">Privacy</a>
+          <a href="#terms">Terms</a>
+        </nav>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ========================================================================
+       PORTALED FULLSCREEN MENU OVERLAY
+       ======================================================================== -->
+  <div class="menu-overlay" id="menu-overlay" aria-hidden="true">
+    <div class="menu-overlay__backdrop" id="menu-backdrop"></div>
+    <div class="menu-overlay__panel" id="menu-panel">
+      <div class="menu-overlay__top">
+        <a href="#top" class="site-header__brand" data-menu-link="#top">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M4.8 5.6A9 9 0 0 0 4.8 18.4" />
+            <path d="M19.2 5.6a9 9 0 0 1 0 12.8" />
+          </svg>
+          <span>Baseline</span>
+        </a>
+
+        <button type="button" class="menu-overlay__close" id="close-menu-btn" aria-label="Close menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </div>
+
+      <nav class="menu-overlay__nav" aria-label="Fullscreen menu">
+        <div class="menu-overlay__link-wrap" data-menu-item="0">
+          <a href="#programs" class="menu-overlay__link" data-menu-link="#programs">Programs</a>
+        </div>
+        <div class="menu-overlay__link-wrap" data-menu-item="1">
+          <a href="#facilities" class="menu-overlay__link" data-menu-link="#facilities">Facilities</a>
+        </div>
+        <div class="menu-overlay__link-wrap" data-menu-item="2">
+          <a href="#testimonials" class="menu-overlay__link" data-menu-link="#testimonials">Reviews</a>
+        </div>
+        <div class="menu-overlay__link-wrap" data-menu-item="3">
+          <a href="#contact" class="menu-overlay__link" data-menu-link="#contact">Contact</a>
+        </div>
+      </nav>
+
+      <div class="menu-overlay__footer">
+        <button type="button" class="pill-btn pill-btn--light" id="menu-book-btn">
+          <span>Book a Visit</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </button>
+
+        <nav class="menu-overlay__socials" aria-label="Social links">
+          <a href="#instagram">Instagram</a>
+          <a href="#x">X</a>
+          <a href="#youtube">YouTube</a>
+          <a href="#linkedin">LinkedIn</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       PORTALED CONTACT MODAL
+       ======================================================================== -->
+  <div class="contact-modal" id="contact-modal" aria-hidden="true">
+    <div class="contact-modal__backdrop" id="contact-backdrop"></div>
+    <div class="contact-modal__panel" id="contact-panel" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title">
+      <div class="contact-modal__header">
+        <div>
+          <div class="eyebrow">
+            <span class="eyebrow__dot" aria-hidden="true"></span>
+            <span>Book a visit</span>
+          </div>
+          <h2 class="contact-modal__title" id="contact-modal-title">
+            <span class="clip-line"><span class="clip-line__inner">Come see</span></span>
+            <span class="clip-line"><span class="clip-line__inner">the courts</span></span>
+          </h2>
+        </div>
+
+        <button type="button" class="contact-modal__close" id="close-contact-btn" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      </div>
+
+      <form class="contact-form" id="contact-form" novalidate>
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-name">Full name</label>
+          <input class="contact-form__input" id="contact-name" name="name" type="text" placeholder="Alex Rivera" autocomplete="name" />
+        </div>
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-email">Email</label>
+          <input class="contact-form__input" id="contact-email" name="email" type="email" placeholder="you@email.com" autocomplete="email" />
+        </div>
+
+        <div class="contact-form__field">
+          <label class="contact-form__label" for="contact-notes">What would you like to play?</label>
+          <textarea class="contact-form__input" id="contact-notes" name="notes" rows="3" placeholder="I'd love to try a private lesson on the clay courts…"></textarea>
+        </div>
+
+        <button type="submit" class="contact-form__submit" id="contact-submit-btn">Request a visit</button>
+      </form>
+
+      <div class="contact-success" id="contact-success" aria-live="polite">
+        <div class="contact-success__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 class="contact-success__title">Request received</h3>
+        <p class="contact-success__body" id="contact-success-text">
+          Thanks, there — our team will be in touch to lock in your visit.
+        </p>
+        <button type="button" class="contact-success__done" id="contact-done-btn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       APPLICATION SCRIPT (ES MODULE + LENIS + SPRING ENGINE)
+       ======================================================================== -->
+  <script type="module">
+    import Lenis from "lenis";
+
+    /* ------------------------------------------------------------------------
+       A. CONSTANTS & DATA
+       ------------------------------------------------------------------------ */
+    const FONT_BASE = 16;
+    const BASE_W = 1920;
+    const COEF = 0.6666;
+
+    const MIN_VISIBLE_MS = 1400;
+    const MAX_VISIBLE_MS = 2600;
+    const EXIT_MS = 850;
+
+    const ASSET_BASE = "https://api.getlayers.ai/storage/v1/object/public/public/assets/baseline-88535e4000";
+
+    const COLLECTION_SLIDES = [
+      {
+        image: `${ASSET_BASE}/2.webp`,
+        brand: "Baseline Pro",
+        title: "Featured Gear",
+        cta: "Shop the kit",
+        alt: "Player driving a backhand on a hard court"
+      },
+      {
+        image: `${ASSET_BASE}/3.webp`,
+        brand: "Court Series",
+        title: "Summer Drop",
+        cta: "View the line",
+        alt: "Player stretching for a forehand on clay"
+      },
+      {
+        image: `${ASSET_BASE}/5.webp`,
+        brand: "Academy Kit",
+        title: "Junior Range",
+        cta: "Browse juniors",
+        alt: "Player set in a ready stance on clay"
+      }
+    ];
+
+    const COACH_SLIDES = [
+      {
+        headline: ["Expert", "Result-", "Driven", "Coaching"],
+        image: `${ASSET_BASE}/5.webp`,
+        name: "Marco Vidal",
+        role: "Head Coach",
+        alt: "Head coach set in a ready stance on clay"
+      },
+      {
+        headline: ["Sharper", "Faster", "Stronger", "Player"],
+        image: `${ASSET_BASE}/4.webp`,
+        name: "Elena Sokolova",
+        role: "Performance Coach",
+        alt: "Performance coach following through on a serve"
+      },
+      {
+        headline: ["Future", "Champions", "Start", "Here"],
+        image: `${ASSET_BASE}/1.webp`,
+        name: "James Okoro",
+        role: "Juniors Lead",
+        alt: "Juniors lead waiting to return on clay"
+      }
+    ];
+
+    const GHOST_PARALLAX_RANGES = [
+      [-3, 3],
+      [3, -3],
+      [-2, 4],
+      [4, -3]
+    ];
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isHoverEnabled = () => window.innerWidth > 768 && !prefersReducedMotion;
+
+    /* ------------------------------------------------------------------------
+       B. ADAPTIVE REM SCALE (ABOVE 1920PX)
+       ------------------------------------------------------------------------ */
+    function updateAdaptiveRem() {
+      const reduction = ((BASE_W - window.innerWidth) / BASE_W) * 100 * COEF;
+      const size = FONT_BASE - (FONT_BASE * reduction) / 100;
+      if (size > FONT_BASE) {
+        document.documentElement.style.fontSize = `${size}px`;
+      } else {
+        document.documentElement.style.removeProperty("font-size");
+      }
+    }
+    updateAdaptiveRem();
+    window.addEventListener("resize", updateAdaptiveRem, { passive: true });
+
+    /* ------------------------------------------------------------------------
+       C. LENIS SMOOTH SCROLL & LOCK MANAGER
+       ------------------------------------------------------------------------ */
+    window.scrollTo(0, 0);
+    const lenis = new Lenis({ smoothWheel: true });
+
+    const lockSources = new Set(["loader"]);
+    function syncScrollLock() {
+      if (lockSources.size > 0) {
+        lenis.stop();
+        document.documentElement.classList.add("scroll-locked");
+      } else {
+        document.documentElement.classList.remove("scroll-locked");
+        lenis.start();
+      }
+    }
+    syncScrollLock();
+
+    function acquireScrollLock(source) {
+      lockSources.add(source);
+      syncScrollLock();
+    }
+
+    function releaseScrollLock(source) {
+      lockSources.delete(source);
+      syncScrollLock();
+    }
+
+    /* ------------------------------------------------------------------------
+       D. TINY rAF SPRING & TWEEN ENGINE
+       ------------------------------------------------------------------------ */
+    const activeSprings = new Set();
+
+    class Spring {
+      constructor({ from = 0, to = 0, tension = 200, friction = 26, onUpdate, onRest }) {
+        this.x = from;
+        this.v = 0;
+        this.target = to;
+        this.tension = tension;
+        this.friction = friction;
+        this.onUpdate = onUpdate;
+        this.onRest = onRest;
+        this.active = false;
+      }
+
+      setTarget(to, config) {
+        if (config) {
+          if (config.tension !== undefined) this.tension = config.tension;
+          if (config.friction !== undefined) this.friction = config.friction;
+        }
+        this.target = to;
+        if (prefersReducedMotion) {
+          this.x = to;
+          this.v = 0;
+          if (this.onUpdate) this.onUpdate(this.x);
+          if (this.onRest) this.onRest();
+          return;
+        }
+        if (!this.active) {
+          this.active = true;
+          activeSprings.add(this);
+        }
+      }
+
+      snap(val) {
+        this.x = val;
+        this.target = val;
+        this.v = 0;
+        this.active = false;
+        activeSprings.delete(this);
+        if (this.onUpdate) this.onUpdate(this.x);
+      }
+
+      step(dt) {
+        const force = -this.tension * (this.x - this.target) - this.friction * this.v;
+        this.v += force * dt;
+        this.x += this.v * dt;
+
+        if (this.onUpdate) this.onUpdate(this.x);
+
+        if (Math.abs(this.x - this.target) < 0.001 && Math.abs(this.v) < 0.001) {
+          this.x = this.target;
+          this.v = 0;
+          this.active = false;
+          activeSprings.delete(this);
+          if (this.onUpdate) this.onUpdate(this.x);
+          if (this.onRest) this.onRest();
+        }
+      }
+    }
+
+    function createSpringGroup(initial, config, apply) {
+      const state = { ...initial };
+      const springs = {};
+      for (const key of Object.keys(initial)) {
+        springs[key] = new Spring({
+          from: initial[key],
+          to: initial[key],
+          tension: config.tension,
+          friction: config.friction,
+          onUpdate: (val) => {
+            state[key] = val;
+            apply(state);
+          }
+        });
+      }
+      return {
+        to(targets, overrideConfig) {
+          for (const key of Object.keys(targets)) {
+            if (springs[key]) {
+              springs[key].setTarget(targets[key], overrideConfig);
+            }
+          }
+        },
+        snap(targets) {
+          for (const key of Object.keys(targets)) {
+            if (springs[key]) {
+              springs[key].snap(targets[key]);
+            }
+          }
+          apply(state);
+        }
+      };
+    }
+
+    /* ------------------------------------------------------------------------
+       E. SCROLL PARALLAX UPDATER
+       ------------------------------------------------------------------------ */
+    const heroEl = document.getElementById("hero");
+    const heroParallaxEl = document.getElementById("hero-parallax");
+    const trustEl = document.getElementById("trust");
+    const ghostParallaxEls = Array.from(document.querySelectorAll("[data-ghost-px]"));
+
+    function getScrollProgress(el) {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const total = vh + rect.height;
+      const passed = vh - rect.top;
+      return Math.min(1, Math.max(0, passed / total));
+    }
+
+    function updateParallax() {
+      if (prefersReducedMotion) return;
+
+      if (heroEl && heroParallaxEl) {
+        const rect = heroEl.getBoundingClientRect();
+        const vh = window.innerHeight || 1;
+        // Hero starts at top of viewport (0), progresses to 1 when bottom leaves top
+        const progress = Math.min(1, Math.max(0, -rect.top / Math.max(rect.height, vh)));
+        const yPct = progress * 12;
+        heroParallaxEl.style.transform = `translate3d(0, ${yPct}%, 0)`;
+      }
+
+      if (trustEl && ghostParallaxEls.length) {
+        const p = getScrollProgress(trustEl);
+        ghostParallaxEls.forEach((el, idx) => {
+          const [fromX, toX] = GHOST_PARALLAX_RANGES[idx] || [0, 0];
+          const curX = fromX + (toX - fromX) * p;
+          el.style.transform = `translate3d(${curX}%, 0, 0)`;
+        });
+      }
+    }
+
+    /* Main rAF Loop */
+    let lastTime = performance.now();
+    function raf(now) {
+      lenis.raf(now);
+
+      const dt = Math.min(0.032, Math.max(0.001, (now - lastTime) / 1000));
+      lastTime = now;
+
+      if (activeSprings.size > 0) {
+        for (const spring of Array.from(activeSprings)) {
+          spring.step(dt);
+        }
+      }
+
+      updateParallax();
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    /* ------------------------------------------------------------------------
+       F. CLIP-MASK & WORD REVEAL HELPERS
+       ------------------------------------------------------------------------ */
+    function prepareWordReveal(el) {
+      const text = el.textContent.trim();
+      el.innerHTML = "";
+      const words = text.split(/\s+/);
+      words.forEach((word) => {
+        const outer = document.createElement("span");
+        outer.className = "clip-word";
+        const inner = document.createElement("span");
+        inner.className = "clip-word__inner";
+        inner.textContent = word;
+        outer.appendChild(inner);
+        el.appendChild(outer);
+      });
+    }
+
+    function playWordReveal(el, { wordStagger = 140, baseDelay = 0, duration = 1100, easing = "var(--ease-out-expo)" } = {}) {
+      const words = el.querySelectorAll(".clip-word");
+      words.forEach((word, i) => {
+        const inner = word.querySelector(".clip-word__inner");
+        const delay = baseDelay + i * wordStagger;
+        inner.style.transition = `transform ${duration}ms ${easing} ${delay}ms, opacity ${duration}ms ${easing} ${delay}ms`;
+        requestAnimationFrame(() => {
+          word.classList.add("is-revealed");
+        });
+      });
+    }
+
+    function playStackedLines(container, { stagger = 120, baseDelay = 0, duration = 950, easing = "var(--ease-out-expo)" } = {}) {
+      const lines = container.querySelectorAll(".clip-line");
+      lines.forEach((line, i) => {
+        const inner = line.querySelector(".clip-line__inner");
+        const delay = baseDelay + i * stagger;
+        inner.style.transition = `transform ${duration}ms ${easing} ${delay}ms, opacity ${duration}ms ${easing} ${delay}ms`;
+        requestAnimationFrame(() => {
+          line.classList.add("is-revealed");
+        });
+      });
+    }
+
+    function resetStackedLines(container) {
+      const lines = container.querySelectorAll(".clip-line");
+      lines.forEach((line) => {
+        const inner = line.querySelector(".clip-line__inner");
+        inner.style.transition = "none";
+        line.classList.remove("is-revealed");
+      });
+    }
+
+    function prepareFadeWords(el) {
+      const text = el.textContent.trim();
+      el.innerHTML = "";
+      const words = text.split(/\s+/);
+      words.forEach((word, idx) => {
+        const span = document.createElement("span");
+        span.className = "fade-word";
+        span.textContent = word;
+        el.appendChild(span);
+        if (idx < words.length - 1) {
+          el.appendChild(document.createTextNode(" "));
+        }
+      });
+    }
+
+    function playFadeWords(el, { wordStagger = 28, delayIn = 250, duration = 700, easing = "var(--ease-out-quart)" } = {}) {
+      const spans = el.querySelectorAll(".fade-word");
+      spans.forEach((span, i) => {
+        const delay = delayIn + i * wordStagger;
+        span.style.transition = `transform ${duration}ms ${easing} ${delay}ms, opacity ${duration}ms ${easing} ${delay}ms`;
+        requestAnimationFrame(() => {
+          span.classList.add("is-revealed");
+        });
+      });
+    }
+
+    const heroTitleEl = document.getElementById("hero-title");
+    const heroTaglineEl = document.querySelector("[data-stacked-lines='hero-tagline']");
+    const facilitiesBodyEl = document.getElementById("facilities-body");
+
+    prepareWordReveal(heroTitleEl);
+    prepareFadeWords(facilitiesBodyEl);
+
+    /* ------------------------------------------------------------------------
+       G. HERO CARDS & COLLECTION CAROUSEL
+       ------------------------------------------------------------------------ */
+    const collectionSliderEl = document.getElementById("collection-slider");
+    const collectionStageEl = document.getElementById("collection-stage");
+    const collectionDots = Array.from(document.querySelectorAll("#collection-dots .carousel-dot"));
+    const membershipCardEl = document.getElementById("membership-card");
+
+    const collectionSliderSpring = createSpringGroup(
+      { opacity: 0, y: 28 },
+      { tension: 200, friction: 26 },
+      ({ opacity, y }) => {
+        collectionSliderEl.style.opacity = opacity;
+        collectionSliderEl.style.transform = `translate3d(0, ${y}px, 0)`;
+      }
+    );
+
+    const membershipCardSpring = createSpringGroup(
+      { opacity: 0, y: 28 },
+      { tension: 200, friction: 26 },
+      ({ opacity, y }) => {
+        membershipCardEl.style.opacity = opacity;
+        membershipCardEl.style.transform = `translate3d(0, ${y}px, 0)`;
+      }
+    );
+
+    let collectionIndex = 0;
+    let collectionTimer = null;
+
+    function createCollectionCardNode(slide) {
+      const article = document.createElement("article");
+      article.className = "glass-card collection-card";
+      article.innerHTML = `
+        <img class="collection-card__img" src="${slide.image}" alt="${slide.alt}" loading="lazy" />
+        <div class="collection-card__meta">
+          <span class="collection-card__brand">${slide.brand}</span>
+          <span class="collection-card__title">${slide.title}</span>
+          <a href="#shop" class="collection-card__cta">${slide.cta} →</a>
+        </div>
+      `;
+      article.querySelector("a").addEventListener("click", (e) => {
+        e.preventDefault();
+        openContactModal();
+      });
+      return article;
+    }
+
+    function setCollectionSlide(nextIdx) {
+      if (nextIdx === collectionIndex) return;
+      const oldCard = collectionStageEl.querySelector(".collection-card:not(.collection-card--outgoing)");
+      collectionIndex = (nextIdx + COLLECTION_SLIDES.length) % COLLECTION_SLIDES.length;
+
+      collectionDots.forEach((dot, idx) => {
+        dot.setAttribute("aria-current", idx === collectionIndex ? "true" : "false");
+      });
+
+      if (oldCard) {
+        oldCard.classList.add("collection-card--outgoing");
+        const outSpring = createSpringGroup(
+          { opacity: 1, y: 0, scale: 1 },
+          { tension: 210, friction: 24 },
+          ({ opacity, y, scale }) => {
+            oldCard.style.opacity = opacity;
+            oldCard.style.transform = `translate3d(0, ${y}px, 0) scale(${scale})`;
+          }
+        );
+        outSpring.to({ opacity: 0, y: 16, scale: 0.96 });
+        setTimeout(() => oldCard.remove(), 450);
+      }
+
+      const newCard = createCollectionCardNode(COLLECTION_SLIDES[collectionIndex]);
+      newCard.style.opacity = "0";
+      newCard.style.transform = "translate3d(0, 16px, 0) scale(0.96)";
+      collectionStageEl.appendChild(newCard);
+
+      const inSpring = createSpringGroup(
+        { opacity: 0, y: 16, scale: 0.96 },
+        { tension: 210, friction: 24 },
+        ({ opacity, y, scale }) => {
+          newCard.style.opacity = opacity;
+          newCard.style.transform = `translate3d(0, ${y}px, 0) scale(${scale})`;
+        }
+      );
+      inSpring.to({ opacity: 1, y: 0, scale: 1 });
+    }
+
+    function startCollectionAutoplay() {
+      stopCollectionAutoplay();
+      collectionTimer = setInterval(() => {
+        setCollectionSlide(collectionIndex + 1);
+      }, 3800);
+    }
+
+    function stopCollectionAutoplay() {
+      if (collectionTimer) {
+        clearInterval(collectionTimer);
+        collectionTimer = null;
+      }
+    }
+
+    collectionDots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const idx = Number(dot.dataset.slide);
+        setCollectionSlide(idx);
+        startCollectionAutoplay();
+      });
+    });
+
+    /* Bind initial collection card link */
+    document.querySelector("#collection-active-card [data-open-contact]")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      openContactModal();
+    });
+
+    /* ------------------------------------------------------------------------
+       H. LOADER CURTAIN & HERO ENTRANCE GATING
+       ------------------------------------------------------------------------ */
+    const loaderEl = document.getElementById("loader");
+    const loaderBrandEl = document.getElementById("loader-brand");
+    const loaderFillEl = document.getElementById("loader-fill");
+
+    let isReady = false;
+    function triggerHeroEntrance() {
+      if (isReady) return;
+      isReady = true;
+
+      playWordReveal(heroTitleEl, {
+        wordStagger: 140,
+        baseDelay: 0,
+        duration: 1100,
+        easing: "var(--ease-out-expo)"
+      });
+
+      playStackedLines(heroTaglineEl, {
+        baseDelay: 350,
+        stagger: 110,
+        duration: 900,
+        easing: "var(--ease-out-expo)"
+      });
+
+      setTimeout(() => {
+        collectionSliderSpring.to({ opacity: 1, y: 0 });
+      }, 650);
+
+      setTimeout(() => {
+        membershipCardSpring.to({ opacity: 1, y: 0 });
+      }, 780);
+
+      startCollectionAutoplay();
+    }
+
+    function initLoader() {
+      const effectiveMin = prefersReducedMotion ? 200 : MIN_VISIBLE_MS;
+      const effectiveExit = prefersReducedMotion ? 0 : EXIT_MS;
+      const fillDuration = Math.max(120, effectiveMin - 120);
+
+      /* Spring in the loader brand */
+      const brandSpring = createSpringGroup(
+        { opacity: 0, y: 16 },
+        { tension: 200, friction: 22 },
+        ({ opacity, y }) => {
+          loaderBrandEl.style.opacity = opacity;
+          loaderBrandEl.style.transform = `translate3d(0, ${y}px, 0)`;
+        }
+      );
+      brandSpring.to({ opacity: 1, y: 0 });
+
+      /* Animate progress track fill */
+      requestAnimationFrame(() => {
+        loaderFillEl.style.transition = `transform ${fillDuration}ms var(--ease-in-out-cubic) 120ms`;
+        loaderFillEl.style.transform = "scaleX(1)";
+      });
+
+      let countdownStarted = false;
+      function startExitCountdown() {
+        if (countdownStarted) return;
+        countdownStarted = true;
+
+        setTimeout(() => {
+          triggerHeroEntrance();
+          releaseScrollLock("loader");
+
+          if (effectiveExit > 0) {
+            loaderEl.style.transition = `transform ${effectiveExit}ms var(--ease-in-out-cubic)`;
+            loaderEl.style.transform = "translateY(-105%)";
+            setTimeout(() => {
+              loaderEl.remove();
+            }, effectiveExit + 40);
+          } else {
+            loaderEl.remove();
+          }
+        }, effectiveMin);
+      }
+
+      if (document.readyState === "complete") {
+        startExitCountdown();
+      } else {
+        window.addEventListener("load", startExitCountdown, { once: true });
+        setTimeout(startExitCountdown, MAX_VISIBLE_MS);
+      }
+    }
+
+    initLoader();
+
+    /* ------------------------------------------------------------------------
+       I. TRUST SECTION (COACH CAROUSEL & GHOST WORDS)
+       ------------------------------------------------------------------------ */
+    let coachIndex = 0;
+    const ghostWordEls = Array.from(document.querySelectorAll("[data-ghost-word]"));
+    const coachCardEl = document.getElementById("trust-coach-card");
+    const coachNameEl = document.getElementById("trust-coach-name");
+    const coachRoleEl = document.getElementById("trust-coach-role");
+    const trustDots = Array.from(document.querySelectorAll("#trust-dots .carousel-dot"));
+
+    function revealGhostWords(animate = true) {
+      ghostWordEls.forEach((wordEl) => {
+        const span = wordEl.querySelector("span");
+        if (!animate || prefersReducedMotion) {
+          span.style.transition = "none";
+          wordEl.classList.add("is-revealed");
+          return;
+        }
+        span.style.transition = "none";
+        wordEl.classList.remove("is-revealed");
+        void span.offsetWidth;
+        span.style.transition = "transform 700ms var(--ease-out-expo), opacity 700ms var(--ease-out-expo)";
+        wordEl.classList.add("is-revealed");
+      });
+    }
+
+    function setCoachSlide(nextIdx) {
+      const targetIdx = (nextIdx + COACH_SLIDES.length) % COACH_SLIDES.length;
+      if (targetIdx === coachIndex) return;
+      coachIndex = targetIdx;
+      const slide = COACH_SLIDES[coachIndex];
+
+      /* Update dots */
+      trustDots.forEach((dot, idx) => {
+        dot.setAttribute("aria-current", idx === coachIndex ? "true" : "false");
+      });
+
+      /* Update ghost words and re-trigger clip reveal */
+      ghostWordEls.forEach((wordEl, idx) => {
+        const span = wordEl.querySelector("span");
+        span.textContent = slide.headline[idx];
+      });
+      revealGhostWords(true);
+
+      /* Cross-fade coach photo */
+      const oldPhoto = document.getElementById("trust-coach-photo");
+      const newPhoto = document.createElement("img");
+      newPhoto.className = "trust__coach-photo";
+      newPhoto.src = slide.image;
+      newPhoto.alt = slide.alt;
+      newPhoto.style.opacity = "0";
+      coachCardEl.insertBefore(newPhoto, coachCardEl.querySelector(".trust__coach-caption"));
+
+      if (oldPhoto) {
+        oldPhoto.removeAttribute("id");
+        const fadeOut = createSpringGroup(
+          { opacity: 1 },
+          { tension: 260, friction: 26 },
+          ({ opacity }) => {
+            oldPhoto.style.opacity = opacity;
+          }
+        );
+        fadeOut.to({ opacity: 0 });
+        setTimeout(() => oldPhoto.remove(), 450);
+      }
+
+      newPhoto.id = "trust-coach-photo";
+      const fadeIn = createSpringGroup(
+        { opacity: 0 },
+        { tension: 260, friction: 26 },
+        ({ opacity }) => {
+          newPhoto.style.opacity = opacity;
+        }
+      );
+      fadeIn.to({ opacity: 1 });
+
+      coachNameEl.textContent = slide.name;
+      coachRoleEl.textContent = slide.role;
+    }
+
+    document.getElementById("trust-prev").addEventListener("click", () => setCoachSlide(coachIndex - 1));
+    document.getElementById("trust-next").addEventListener("click", () => setCoachSlide(coachIndex + 1));
+    trustDots.forEach((dot) => {
+      dot.addEventListener("click", () => setCoachSlide(Number(dot.dataset.coach)));
+    });
+
+    /* ------------------------------------------------------------------------
+       J. IN-VIEW SCROLL REVEAL REGISTRY (PLAY ONCE)
+       ------------------------------------------------------------------------ */
+    const inviewRegistry = new Map();
+
+    function registerInview(el, { delayIn = 0, run }) {
+      inviewRegistry.set(el, { delayIn, run, triggered: false });
+    }
+
+    const inviewObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const item = inviewRegistry.get(entry.target);
+          if (!item || item.triggered) return;
+          item.triggered = true;
+          inviewObserver.unobserve(entry.target);
+
+          if (item.delayIn > 0 && !prefersReducedMotion) {
+            setTimeout(() => item.run(), item.delayIn);
+          } else {
+            item.run();
+          }
+        });
+      },
+      { threshold: 0.14 }
+    );
+
+    function observeInview(el, opts) {
+      if (!el) return;
+      registerInview(el, opts);
+      inviewObserver.observe(el);
+    }
+
+    /* Trust Section Inview */
+    const trustPercentEl = document.getElementById("trust-percent");
+    const trustPercentSpring = createSpringGroup(
+      { opacity: 0, scale: 0.9 },
+      { tension: 220, friction: 22 },
+      ({ opacity, scale }) => {
+        trustPercentEl.style.opacity = opacity;
+        trustPercentEl.style.transform = `scale(${scale})`;
+      }
+    );
+    observeInview(trustPercentEl, {
+      run: () => trustPercentSpring.to({ opacity: 1, scale: 1 })
+    });
+
+    const trustBadgeCardEl = document.getElementById("trust-badge-card");
+    const trustBadgeSpring = createSpringGroup(
+      { opacity: 0, y: 24 },
+      { tension: 200, friction: 26 },
+      ({ opacity, y }) => {
+        trustBadgeCardEl.style.opacity = opacity;
+        trustBadgeCardEl.style.transform = `translate3d(0, ${y}px, 0)`;
+      }
+    );
+    observeInview(trustBadgeCardEl, {
+      delayIn: 120,
+      run: () => trustBadgeSpring.to({ opacity: 1, y: 0 })
+    });
+
+    observeInview(document.getElementById("trust-title"), {
+      run: () => revealGhostWords(true)
+    });
+
+    const trustCoachWrapEl = document.getElementById("trust-coach-wrap");
+    const isDesktopCoach = () => window.innerWidth >= 640;
+    const trustCoachSpring = createSpringGroup(
+      { opacity: 0, y: 60, scale: 0.92 },
+      { tension: 170, friction: 26 },
+      ({ opacity, y, scale }) => {
+        trustCoachWrapEl.style.opacity = opacity;
+        if (isDesktopCoach()) {
+          trustCoachWrapEl.style.transform = `translate(-50%, -50%) translate3d(0, ${y}px, 0) scale(${scale})`;
+        } else {
+          trustCoachWrapEl.style.transform = `translate3d(0, ${y}px, 0) scale(${scale})`;
+        }
+      }
+    );
+    observeInview(trustCoachWrapEl, {
+      run: () => trustCoachSpring.to({ opacity: 1, y: 0, scale: 1 })
+    });
+
+    /* Stacked-lines headings in Programs, Facilities, Stats, Testimonials, Footer */
+    document.querySelectorAll("[data-stacked-lines]").forEach((el) => {
+      const key = el.dataset.stackedLines;
+      if (key === "hero-tagline") return;
+      observeInview(el, {
+        run: () => playStackedLines(el, { stagger: 120, duration: 950, easing: "var(--ease-out-expo)" })
+      });
+    });
+
+    /* Programs rows */
+    document.querySelectorAll("[data-program-row]").forEach((linkEl) => {
+      const idx = Number(linkEl.dataset.programRow);
+      const rowEl = linkEl.querySelector(".programs__row");
+      const rowSpring = createSpringGroup(
+        { opacity: 0, y: 26 },
+        { tension: 190, friction: 26 },
+        ({ opacity, y }) => {
+          rowEl.style.opacity = opacity;
+          rowEl.style.transform = `translate3d(0, ${y}px, 0)`;
+        }
+      );
+      observeInview(linkEl, {
+        delayIn: idx * 90,
+        run: () => rowSpring.to({ opacity: 1, y: 0 })
+      });
+    });
+
+    /* Facilities thumb, body, and court cards */
+    const facilitiesThumbEl = document.getElementById("facilities-thumb");
+    const facilitiesThumbSpring = createSpringGroup(
+      { opacity: 0, scale: 0.85 },
+      { tension: 240, friction: 20 },
+      ({ opacity, scale }) => {
+        facilitiesThumbEl.style.opacity = opacity;
+        facilitiesThumbEl.style.transform = `scale(${scale})`;
+      }
+    );
+    observeInview(facilitiesThumbEl, {
+      run: () => facilitiesThumbSpring.to({ opacity: 1, scale: 1 })
+    });
+
+    observeInview(facilitiesBodyEl, {
+      run: () => playFadeWords(facilitiesBodyEl, { wordStagger: 28, delayIn: 250, duration: 700 })
+    });
+
+    document.querySelectorAll("[data-court-card]").forEach((cardEl) => {
+      const idx = Number(cardEl.dataset.courtCard);
+      const cardSpring = createSpringGroup(
+        { opacity: 0, y: 48 },
+        { tension: 180, friction: 26 },
+        ({ opacity, y }) => {
+          cardEl.style.opacity = opacity;
+          cardEl.style.transform = `translate3d(0, ${y}px, 0)`;
+        }
+      );
+      observeInview(cardEl, {
+        delayIn: idx * 140,
+        run: () => cardSpring.to({ opacity: 1, y: 0 })
+      });
+    });
+
+    /* Stats cells */
+    document.querySelectorAll("[data-stat-cell]").forEach((cellEl) => {
+      const idx = Number(cellEl.dataset.statCell);
+      const cellSpring = createSpringGroup(
+        { opacity: 0, y: 30 },
+        { tension: 180, friction: 24 },
+        ({ opacity, y }) => {
+          cellEl.style.opacity = opacity;
+          cellEl.style.transform = `translate3d(0, ${y}px, 0)`;
+        }
+      );
+      observeInview(cellEl, {
+        delayIn: idx * 110,
+        run: () => cellSpring.to({ opacity: 1, y: 0 })
+      });
+    });
+
+    /* Testimonials */
+    document.querySelectorAll("[data-testimonial]").forEach((itemEl) => {
+      const idx = Number(itemEl.dataset.testimonial);
+      const itemSpring = createSpringGroup(
+        { opacity: 0, y: 40 },
+        { tension: 180, friction: 26 },
+        ({ opacity, y }) => {
+          itemEl.style.opacity = opacity;
+          itemEl.style.transform = `translate3d(0, ${y}px, 0)`;
+        }
+      );
+      observeInview(itemEl, {
+        delayIn: idx * 120,
+        run: () => itemSpring.to({ opacity: 1, y: 0 })
+      });
+    });
+
+    /* Footer CTA pill */
+    const footerCtaEl = document.getElementById("footer-cta-action");
+    const footerCtaSpring = createSpringGroup(
+      { opacity: 0, y: 20 },
+      { tension: 200, friction: 24 },
+      ({ opacity, y }) => {
+        footerCtaEl.style.opacity = opacity;
+        footerCtaEl.style.transform = `translate3d(0, ${y}px, 0)`;
+      }
+    );
+    observeInview(footerCtaEl, {
+      delayIn: 150,
+      run: () => footerCtaSpring.to({ opacity: 1, y: 0 })
+    });
+
+    /* ------------------------------------------------------------------------
+       K. HOVER SPRING MICRO-INTERACTIONS (DISABLED <= 768PX)
+       ------------------------------------------------------------------------ */
+    function bindHoverSpring(triggerEl, initial, target, config, apply) {
+      const spring = createSpringGroup(initial, config, apply);
+      triggerEl.addEventListener("pointerenter", () => {
+        if (!isHoverEnabled()) return;
+        spring.to(target);
+      });
+      triggerEl.addEventListener("pointerleave", () => {
+        if (!isHoverEnabled()) return;
+        spring.to(initial);
+      });
+    }
+
+    /* Pill buttons trailing arrow */
+    document.querySelectorAll(".pill-btn").forEach((btn) => {
+      const svg = btn.querySelector("svg");
+      if (!svg) return;
+      bindHoverSpring(
+        btn,
+        { x: 0 },
+        { x: 5 },
+        { tension: 320, friction: 20 },
+        ({ x }) => {
+          svg.style.transform = `translate3d(${x}px, 0, 0)`;
+        }
+      );
+    });
+
+    /* Carousel arrow buttons scale */
+    document.querySelectorAll(".arrow-btn").forEach((btn) => {
+      const svg = btn.querySelector("svg");
+      const isPrev = btn.classList.contains("arrow-btn--prev");
+      bindHoverSpring(
+        btn,
+        { scale: 1 },
+        { scale: 1.15 },
+        { tension: 320, friction: 18 },
+        ({ scale }) => {
+          svg.style.transform = `${isPrev ? "scaleX(-1) " : ""}scale(${scale})`;
+        }
+      );
+    });
+
+    /* Program rows trailing arrow */
+    document.querySelectorAll(".programs__link").forEach((link) => {
+      const arrowWrap = link.querySelector(".programs__arrow");
+      bindHoverSpring(
+        link,
+        { x: 0, opacity: 0.55 },
+        { x: 8, opacity: 1 },
+        { tension: 300, friction: 20 },
+        ({ x, opacity }) => {
+          arrowWrap.style.transform = `translate3d(${x}px, 0, 0)`;
+          arrowWrap.style.opacity = opacity;
+        }
+      );
+    });
+
+    /* Facilities court cards image scale */
+    document.querySelectorAll(".court-card").forEach((card) => {
+      const img = card.querySelector(".court-card__img");
+      bindHoverSpring(
+        card,
+        { scale: 1 },
+        { scale: 1.03 },
+        { tension: 300, friction: 22 },
+        ({ scale }) => {
+          img.style.transform = `scale(${scale})`;
+        }
+      );
+    });
+
+    /* Testimonial cards hover lift */
+    document.querySelectorAll(".testimonial-card").forEach((card) => {
+      bindHoverSpring(
+        card,
+        { y: 0 },
+        { y: -8 },
+        { tension: 300, friction: 22 },
+        ({ y }) => {
+          card.style.transform = `translate3d(0, ${y}px, 0)`;
+        }
+      );
+    });
+
+    /* Close buttons X-rotate */
+    [document.getElementById("close-menu-btn"), document.getElementById("close-contact-btn")].forEach((btn) => {
+      if (!btn) return;
+      const svg = btn.querySelector("svg");
+      bindHoverSpring(
+        btn,
+        { rot: 0 },
+        { rot: 90 },
+        { tension: 300, friction: 18 },
+        ({ rot }) => {
+          svg.style.transform = `rotate(${rot}deg)`;
+        }
+      );
+    });
+
+    /* ------------------------------------------------------------------------
+       L. ANCHOR SMOOTH SCROLLING
+       ------------------------------------------------------------------------ */
+    document.querySelectorAll("[data-scroll-to]").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const targetSelector = link.dataset.scrollTo;
+        if (!targetSelector || !targetSelector.startsWith("#")) return;
+        const targetEl = document.querySelector(targetSelector);
+        if (!targetEl) return;
+        e.preventDefault();
+        lenis.scrollTo(targetEl);
+      });
+    });
+
+    /* ------------------------------------------------------------------------
+       M. FULLSCREEN MENU OVERLAY
+       ------------------------------------------------------------------------ */
+    const menuOverlayEl = document.getElementById("menu-overlay");
+    const menuBackdropEl = document.getElementById("menu-backdrop");
+    const menuPanelEl = document.getElementById("menu-panel");
+    const openMenuBtn = document.getElementById("open-menu-btn");
+    const closeMenuBtn = document.getElementById("close-menu-btn");
+    const menuItemWraps = Array.from(document.querySelectorAll("[data-menu-item]"));
+
+    let isMenuOpen = false;
+
+    const menuBackdropSpring = createSpringGroup(
+      { opacity: 0 },
+      { tension: 260, friction: 30 },
+      ({ opacity }) => {
+        menuBackdropEl.style.opacity = opacity;
+      }
+    );
+
+    const menuPanelSpring = createSpringGroup(
+      { opacity: 0, y: -24 },
+      { tension: 220, friction: 28 },
+      ({ opacity, y }) => {
+        menuPanelEl.style.opacity = opacity;
+        menuPanelEl.style.transform = `translate3d(0, ${y}px, 0)`;
+      }
+    );
+
+    const menuItemSprings = menuItemWraps.map((wrap) =>
+      createSpringGroup(
+        { opacity: 0, y: 28 },
+        { tension: 200, friction: 26 },
+        ({ opacity, y }) => {
+          wrap.style.opacity = opacity;
+          wrap.style.transform = `translate3d(0, ${y}px, 0)`;
+        }
+      )
+    );
+
+    function openMenuOverlay() {
+      if (isMenuOpen) return;
+      isMenuOpen = true;
+      acquireScrollLock("menu");
+      menuOverlayEl.classList.add("is-open");
+      menuOverlayEl.setAttribute("aria-hidden", "false");
+      openMenuBtn.setAttribute("aria-expanded", "true");
+
+      menuBackdropSpring.to({ opacity: 1 });
+      menuPanelSpring.to({ opacity: 1, y: 0 });
+
+      menuItemSprings.forEach((spring, i) => {
+        spring.snap({ opacity: 0, y: 28 });
+        setTimeout(() => {
+          if (isMenuOpen) spring.to({ opacity: 1, y: 0 });
+        }, 120 + i * 70);
+      });
+    }
+
+    function closeMenuOverlay() {
+      if (!isMenuOpen) return;
+      isMenuOpen = false;
+      openMenuBtn.setAttribute("aria-expanded", "false");
+      menuOverlayEl.setAttribute("aria-hidden", "true");
+
+      menuBackdropSpring.to({ opacity: 0 });
+      menuPanelSpring.to({ opacity: 0, y: -24 });
+      menuItemSprings.forEach((s) => s.to({ opacity: 0, y: 28 }));
+
+      setTimeout(() => {
+        if (!isMenuOpen) {
+          menuOverlayEl.classList.remove("is-open");
+          releaseScrollLock("menu");
+        }
+      }, 300);
+    }
+
+    openMenuBtn.addEventListener("click", openMenuOverlay);
+    closeMenuBtn.addEventListener("click", closeMenuOverlay);
+    menuBackdropEl.addEventListener("click", closeMenuOverlay);
+
+    document.querySelectorAll("[data-menu-link]").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.dataset.menuLink;
+        const target = href ? document.querySelector(href) : null;
+        if (target) {
+          e.preventDefault();
+          closeMenuOverlay();
+          setTimeout(() => lenis.scrollTo(target), 80);
+        }
+      });
+    });
+
+    document.getElementById("menu-book-btn").addEventListener("click", () => {
+      closeMenuOverlay();
+      setTimeout(() => openContactModal(), 160);
+    });
+
+    /* ------------------------------------------------------------------------
+       N. CONTACT MODAL (PORTALED, SCROLL-LOCKED, STUBBED SUBMIT)
+       ------------------------------------------------------------------------ */
+    const contactModalEl = document.getElementById("contact-modal");
+    const contactBackdropEl = document.getElementById("contact-backdrop");
+    const contactPanelEl = document.getElementById("contact-panel");
+    const contactTitleEl = document.getElementById("contact-modal-title");
+    const closeContactBtn = document.getElementById("close-contact-btn");
+    const contactFormEl = document.getElementById("contact-form");
+    const contactNameInput = document.getElementById("contact-name");
+    const contactSubmitBtn = document.getElementById("contact-submit-btn");
+    const contactSuccessEl = document.getElementById("contact-success");
+    const contactSuccessTextEl = document.getElementById("contact-success-text");
+    const contactDoneBtn = document.getElementById("contact-done-btn");
+
+    let isContactOpen = false;
+    let isSubmitting = false;
+
+    const contactBackdropSpring = createSpringGroup(
+      { opacity: 0 },
+      { tension: 240, friction: 30 },
+      ({ opacity }) => {
+        contactBackdropEl.style.opacity = opacity;
+      }
+    );
+
+    const contactPanelSpring = createSpringGroup(
+      { opacity: 0, y: 28, scale: 0.96 },
+      { tension: 240, friction: 26 },
+      ({ opacity, y, scale }) => {
+        contactPanelEl.style.opacity = opacity;
+        contactPanelEl.style.transform = `translate3d(0, ${y}px, 0) scale(${scale})`;
+      }
+    );
+
+    function openContactModal() {
+      if (isContactOpen) return;
+      isContactOpen = true;
+      acquireScrollLock("contact");
+      contactModalEl.classList.add("is-open");
+      contactModalEl.setAttribute("aria-hidden", "false");
+
+      contactBackdropSpring.to({ opacity: 1 });
+      contactPanelSpring.to({ opacity: 1, y: 0, scale: 1 });
+
+      resetStackedLines(contactTitleEl);
+      requestAnimationFrame(() => {
+        playStackedLines(contactTitleEl, {
+          stagger: 90,
+          duration: 800,
+          easing: "var(--ease-out-expo)"
+        });
+      });
+
+      setTimeout(() => {
+        if (isContactOpen) contactNameInput.focus();
+      }, 120);
+    }
+
+    function closeContactModal() {
+      if (!isContactOpen) return;
+      isContactOpen = false;
+      contactModalEl.setAttribute("aria-hidden", "true");
+
+      contactBackdropSpring.to({ opacity: 0 });
+      contactPanelSpring.to({ opacity: 0, y: 28, scale: 0.96 });
+
+      setTimeout(() => {
+        if (!isContactOpen) {
+          contactModalEl.classList.remove("is-open");
+          releaseScrollLock("contact");
+        }
+      }, 300);
+
+      setTimeout(() => {
+        if (!isContactOpen) {
+          contactFormEl.reset();
+          contactFormEl.style.display = "flex";
+          contactSuccessEl.classList.remove("is-visible");
+          contactSubmitBtn.disabled = false;
+          contactSubmitBtn.textContent = "Request a visit";
+          isSubmitting = false;
+        }
+      }, 350);
+    }
+
+    document.querySelectorAll("[data-open-contact]").forEach((trigger) => {
+      trigger.addEventListener("click", (e) => {
+        e.preventDefault();
+        openContactModal();
+      });
+    });
+
+    closeContactBtn.addEventListener("click", closeContactModal);
+    contactBackdropEl.addEventListener("click", closeContactModal);
+    contactDoneBtn.addEventListener("click", closeContactModal);
+
+    /* Stubbed form submission — never hits a network */
+    contactFormEl.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (isSubmitting) return;
+      isSubmitting = true;
+      contactSubmitBtn.disabled = true;
+      contactSubmitBtn.textContent = "Sending…";
+
+      const rawName = contactNameInput.value.trim();
+      const firstName = rawName ? rawName.split(/\s+/)[0] : "there";
+
+      setTimeout(() => {
+        contactSuccessTextEl.textContent = `Thanks, ${firstName} — our team will be in touch to lock in your visit.`;
+        contactFormEl.style.display = "none";
+        contactSuccessEl.classList.add("is-visible");
+        isSubmitting = false;
+      }, 450);
+    });
+
+    /* Global Escape handler */
+    document.addEventListener("keydown", (e) => {
+      if (e.key !== "Escape") return;
+      if (isContactOpen) {
+        closeContactModal();
+      } else if (isMenuOpen) {
+        closeMenuOverlay();
+      }
+    });
+  </script>
+</body>
+</html>
